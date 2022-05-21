@@ -82,7 +82,7 @@ contract DCX {
         tokenList.push(_ticker);
     }
 
-    function deposit (
+    function deposite (
         uint256 _amount,
         bytes32 _ticker
     ) tokenExist(_ticker) external {

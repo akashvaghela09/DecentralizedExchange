@@ -72,7 +72,7 @@ const amount = ethers.utils.parseEther('1000');
         const ticker = await token.name();
         console.log(ticker);
 
-        await dcx.deposit(amount, ethers.utils.formatBytes32String(ticker), { from : trader});
+        await dcx.deposite(amount, ethers.utils.formatBytes32String(ticker), { from : trader});
     }
 
     await Promise.all(

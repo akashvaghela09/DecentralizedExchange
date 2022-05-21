@@ -47,9 +47,11 @@ async function main() {
         const ticker = await token.name();
         console.log(ticker);
 
+        // console.log("tokens: ", await dcx.tokens());
+        // console.log("tokenList: ", await dcx.tokenList());
         await dcx
             .connect(trader)
-            .deposit(amount, hre.ethers.utils.formatBytes32String(ticker));
+            .deposite(amount, hre.ethers.utils.formatBytes32String(ticker));
     }
 
     await Promise.all(

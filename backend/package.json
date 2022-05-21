@@ -1,7 +1,7 @@
 {
   "name": "hardhat-project",
   "scripts": {
-    "deploy": "npx hardhat run scripts/deploy.js --network rinkeby",
+    "deploy": "npx hardhat run scripts/deploy.js",
     "test": "truffle test"
   },
   "devDependencies": {
