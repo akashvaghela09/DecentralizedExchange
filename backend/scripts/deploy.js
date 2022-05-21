@@ -38,12 +38,18 @@ async function main() {
     ])
 
     const amount = ethers.utils.parseEther('1000');
+
     const seedTokenBalance = async (token, trader) => {
         await token.faucet(trader.address, amount)
+
+        console.log(await token.balanceOf(trader.address));
         await token.connect(trader).approve(dcx.address, amount);
         const ticker = await token.name();
+        console.log(ticker);
 
-        await dcx.connect(trader).deposit(amount, ethers.utils.formatBytes32String(ticker));
+        await dcx
+            .connect(trader)
+            .deposit(amount, hre.ethers.utils.formatBytes32String(ticker));
     }
 
     await Promise.all(

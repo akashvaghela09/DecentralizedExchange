@@ -49,7 +49,7 @@ contract DCX {
     bytes32 constant DAI = bytes32("DAI");
     address public admin;
     uint256 public nextOrderId;
-    uint256 public nextTraderId;
+    uint256 public nextTradeId;
 
     constructor() public {
         admin = msg.sender;
@@ -82,7 +82,7 @@ contract DCX {
         tokenList.push(_ticker);
     }
 
-    function deposite (
+    function deposit (
         uint256 _amount,
         bytes32 _ticker
     ) tokenExist(_ticker) external {
@@ -160,7 +160,7 @@ contract DCX {
             orders[i].filled = orders[i].filled.add(matched);
 
             emit NewTrade(
-                nextTraderId,
+                nextTradeId,
                 orders[i].id,
                 _ticker,
                 orders[i].trader,
@@ -189,14 +189,14 @@ contract DCX {
                 traderBalances[orders[i].trader][DAI] = traderBalances[orders[i].trader][DAI].add(matched.mul(orders[i].price));
             }
 
-            nextTraderId++;
+            nextTradeId++;
             i++;
         }
 
 
         while(i < orders.length && orders[i].filled == orders[i].amount) {
             for(uint j = i; i < orders.length - 1; j++) {
-                orders[i] = orders[j + 1];
+                orders[j] = orders[j + 1];
             }
             orders.pop();
             i++;
