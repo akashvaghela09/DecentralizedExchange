@@ -50,7 +50,7 @@ contract DCX {
     uint256 public nextOrderId;
     uint256 public nextTradeId;
 
-    constructor() public {
+    constructor() {
         admin = msg.sender;
     }
 
@@ -98,7 +98,11 @@ contract DCX {
         uint256 _amount,
         bytes32 _ticker
     ) tokenExist(_ticker) external {
-        require(traderBalances[msg.sender][_ticker] >= _amount);
+        require(
+            traderBalances[msg.sender][_ticker] >= _amount,
+            'Insufficient Funds'
+        ); 
+        traderBalances[msg.sender][_ticker] -= _amount;
         IERC20(tokens[_ticker].tokenAddress).transfer(msg.sender, _amount);
     }
 
