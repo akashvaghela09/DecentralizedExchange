@@ -41,17 +41,11 @@ async function main() {
 
     const seedTokenBalance = async (token, trader) => {
         await token.faucet(trader.address, amount)
-
-        console.log(await token.balanceOf(trader.address));
         await token.connect(trader).approve(dcx.address, amount);
         const ticker = await token.name();
-        console.log(ticker);
-
-        // console.log("tokens: ", await dcx.tokens());
-        // console.log("tokenList: ", await dcx.tokenList());
         await dcx
             .connect(trader)
-            .deposite(amount, hre.ethers.utils.formatBytes32String(ticker));
+            .deposit(amount, hre.ethers.utils.formatBytes32String(ticker));
     }
 
     await Promise.all(
