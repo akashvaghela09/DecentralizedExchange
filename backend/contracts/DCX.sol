@@ -192,7 +192,7 @@ contract DCX {
             i++;
         }
 
-
+        i = 0;
         while(i < orders.length && orders[i].filled == orders[i].amount) {
             for(uint j = i; i < orders.length - 1; j++) {
                 orders[j] = orders[j + 1];

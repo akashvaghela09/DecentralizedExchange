@@ -37,6 +37,8 @@ async function main() {
         dcx.addToken(ZRX, zrx.address)
     ])
 
+    console.log("tokens added");
+
     const amount = ethers.utils.parseEther('1000');
 
     const seedTokenBalance = async (token, trader) => {
@@ -63,6 +65,70 @@ async function main() {
     await Promise.all(
         [dai, bat, rep, zrx].map((token) => seedTokenBalance(token, trader4))
     )
+
+    console.log("tokens seeded");
+
+    const increaseTime = async (seconds) => {
+        await ethers.provider.send("evm_increaseTime", [seconds]);
+        await ethers.provider.send("evm_mine");
+      };
+    
+      await dcx.connect(trader1).createLimitOrder(BAT, 1000, 10, SIDE.BUY);
+      await dcx.connect(trader2).createMarketOrder(BAT, 1000, SIDE.SELL);
+      await increaseTime(1);
+      await dcx.connect(trader1).createLimitOrder(BAT, 1200, 11, SIDE.BUY);
+      await dcx.connect(trader2).createMarketOrder(BAT, 1200, SIDE.SELL);
+      await increaseTime(1);
+      await dcx.connect(trader1).createLimitOrder(BAT, 1200, 15, SIDE.BUY);
+      await dcx.connect(trader2).createMarketOrder(BAT, 1200, SIDE.SELL);
+      await increaseTime(1);
+      await dcx.connect(trader1).createLimitOrder(BAT, 1500, 14, SIDE.BUY);
+      await dcx.connect(trader2).createMarketOrder(BAT, 1500, SIDE.SELL);
+      await increaseTime(1);
+      await dcx.connect(trader1).createLimitOrder(BAT, 2000, 12, SIDE.BUY);
+      await dcx.connect(trader2).createMarketOrder(BAT, 2000, SIDE.SELL);
+    
+      await dcx.connect(trader1).createLimitOrder(REP, 1000, 2, SIDE.BUY);
+      await dcx.connect(trader2).createMarketOrder(REP, 1000, SIDE.SELL);
+      await increaseTime(1);
+      await dcx.connect(trader1).createLimitOrder(REP, 500, 4, SIDE.BUY);
+      await dcx.connect(trader2).createMarketOrder(REP, 500, SIDE.SELL);
+      await increaseTime(1);
+      await dcx.connect(trader1).createLimitOrder(REP, 800, 2, SIDE.BUY);
+      await dcx.connect(trader2).createMarketOrder(REP, 800, SIDE.SELL);
+      await increaseTime(1);
+      await dcx.connect(trader1).createLimitOrder(REP, 1200, 6, SIDE.BUY);
+      await dcx.connect(trader2).createMarketOrder(REP, 1200, SIDE.SELL);
+    
+      console.log("Trade Added");
+    
+      // create orders
+      await Promise.all([
+        dcx.connect(trader1).createLimitOrder(BAT, 1400, 10, SIDE.BUY),
+        dcx.connect(trader2).createLimitOrder(BAT, 1200, 11, SIDE.BUY),
+        dcx.connect(trader2).createLimitOrder(BAT, 1000, 12, SIDE.BUY),
+        dcx.connect(trader1).createLimitOrder(REP, 3000, 4, SIDE.BUY),
+        dcx.connect(trader1).createLimitOrder(REP, 2000, 5, SIDE.BUY),
+        dcx.connect(trader2).createLimitOrder(REP, 500, 6, SIDE.BUY),
+        dcx.connect(trader1).createLimitOrder(ZRX, 4000, 12, SIDE.BUY),
+        dcx.connect(trader1).createLimitOrder(ZRX, 3000, 13, SIDE.BUY),
+        dcx.connect(trader2).createLimitOrder(ZRX, 500, 14, SIDE.BUY),
+        dcx.connect(trader3).createLimitOrder(BAT, 2000, 16, SIDE.SELL),
+        dcx.connect(trader4).createLimitOrder(BAT, 3000, 15, SIDE.SELL),
+        dcx.connect(trader4).createLimitOrder(BAT, 500, 14, SIDE.SELL),
+        dcx.connect(trader3).createLimitOrder(REP, 4000, 10, SIDE.SELL),
+        dcx.connect(trader3).createLimitOrder(REP, 2000, 9, SIDE.SELL),
+        dcx.connect(trader4).createLimitOrder(REP, 800, 8, SIDE.SELL),
+        dcx.connect(trader3).createLimitOrder(ZRX, 1500, 23, SIDE.SELL),
+        dcx.connect(trader3).createLimitOrder(ZRX, 1200, 22, SIDE.SELL),
+        dcx.connect(trader4).createLimitOrder(ZRX, 900, 21, SIDE.SELL),
+      ]);
+    
+      console.log("Order Added");
+    
+      const orders = await dcx.connect(trader1).getOrders(BAT, SIDE.BUY);
+      const sellOrders = await dcx.connect(trader1).getOrders(BAT, SIDE.SELL);
+    //   console.log(orders, sellOrders);
 
     console.log("Success, Dcx Deployed: ", dcx.address);
     console.log("Success, Bat Deployed: ", bat.address);
