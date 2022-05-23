@@ -128,6 +128,8 @@ async function main() {
     
       const orders = await dcx.connect(trader1).getOrders(BAT, SIDE.BUY);
       const sellOrders = await dcx.connect(trader1).getOrders(BAT, SIDE.SELL);
+      const tempTokenList = await dcx.getTokens()
+      console.log(tempTokenList)
     //   console.log(orders, sellOrders);
 
     console.log("Success, Dcx Deployed: ", dcx.address);

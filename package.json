@@ -4,14 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cd backend && truffle test",
+    "deploy": "cd backend && npx hardhat run scripts/deploy.js",
+    "start": "cd client && npm start"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/akashvaghela09/DecentralizedExchange.git"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/akashvaghela09/DecentralizedExchange/issues"
   },
