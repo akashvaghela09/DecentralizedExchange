@@ -1,8 +1,7 @@
 import React from 'react';
 import { Wallet } from './Wallet';
-import { AiFillHome, AiOutlineQuestionCircle } from 'react-icons/ai';
-import { FaWpforms } from 'react-icons/fa';
-import { MdDashboard } from 'react-icons/md';
+import { AiFillHome } from 'react-icons/ai';
+import { FaGithub, FaUserCircle } from 'react-icons/fa';
 import { useNavigate } from 'react-router';
 
 const Header = () => {
@@ -21,8 +20,8 @@ const Header = () => {
             </div>
             <div className='flex grow justify-end items-center  md:pr-4'>
                 <div className='hidden md:flex md:border-r-2 border-slate-400'>
-                    <p onClick={() => handleRoute("causes")} className='cursor-pointer hover:bg-blue-500 px-3 py-2 rounded-md transition ease-in h-fit text-xl text-slate-200 mx-3'>GitHub</p>
-                    <p onClick={() => handleRoute("contact-me")} className='cursor-pointer hover:bg-blue-500 px-3 py-2 rounded-md transition ease-in h-fit text-xl text-slate-200 mx-3'><a href='https://akashvaghela.dev' rel="noreferrer" target="_blank">About</a></p>
+                    <p className='cursor-pointer hover:bg-blue-500 px-3 py-2 rounded-md transition ease-in h-fit text-xl text-slate-200 mx-3'><a href='https://github.com/akashvaghela09/DecentralizedExchange' rel="noreferrer" target="_blank">GitHub</a></p>
+                    <p className='cursor-pointer hover:bg-blue-500 px-3 py-2 rounded-md transition ease-in h-fit text-xl text-slate-200 mx-3'><a href='https://akashvaghela.dev' rel="noreferrer" target="_blank">About</a></p>
                 </div>
 
                 <div className=' flex justify-around fixed bg-slate-800 bottom-0 left-0 w-full h-fit md:hidden'>
@@ -31,16 +30,16 @@ const Header = () => {
                         <p className="text-slate-300 text-sm">Home</p>
                     </div>
                     <div className="flex items-center flex-col m-2">
-                        <FaWpforms onClick={() => handleRoute("raise-fund")} className='fill-slate-100 text-2xl cursor-pointer' />
-                        <p className="text-slate-300 text-sm">Raise Fund</p>
+                        <a href='https://github.com/akashvaghela09/DecentralizedExchange' rel="noreferrer" target="_blank">
+                            <FaGithub className='fill-slate-100 text-2xl cursor-pointer' />
+                        </a>
+                        <p className="text-slate-300 text-sm">Github</p>
                     </div>
                     <div className="flex items-center flex-col m-2">
-                        <MdDashboard onClick={() => handleRoute("causes")} className='fill-slate-100 text-2xl cursor-pointer' />
-                        <p className="text-slate-300 text-sm">Causes</p>
-                    </div>
-                    <div className="flex items-center flex-col m-2">
-                        <AiOutlineQuestionCircle onClick={() => handleRoute("contact-me")} className='fill-slate-100 text-2xl cursor-pointer' />
-                        <p className="text-slate-300 text-sm">Help</p>
+                        <a href='https://akashvaghela.dev' rel="noreferrer" target="_blank">
+                            <FaUserCircle className='fill-slate-100 text-2xl cursor-pointer' />
+                        </a>
+                        <p className="text-slate-300 text-sm">About</p>
                     </div>
                 </div>
                 <Wallet />
