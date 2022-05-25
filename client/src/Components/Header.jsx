@@ -1,10 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Wallet } from './Wallet';
 import { AiFillHome } from 'react-icons/ai';
 import { FaGithub, FaUserCircle } from 'react-icons/fa';
 import { useNavigate } from 'react-router';
+import { useDispatch, useSelector } from "react-redux";
+import { setTradeToken } from '../Redux/app/actions';
 
 const Header = () => {
+    const dispatch = useDispatch();
+
+    const {
+        tradeToken
+    } = useSelector(state => state.app)
+
+    const tokenList = ["Bat", "Rep", "Zrx"];
+
+    const [selectModal, setSelectModal] = useState(false);
 
     let navigate = useNavigate();
 
@@ -12,11 +23,41 @@ const Header = () => {
         navigate(`/${para}`)
     }
 
+    const handleSelect = (para) => {
+        dispatch(setTradeToken(para))
+        setSelectModal(false)
+    }
+
     return (
         <div className='bg-slate-800 h-fit flex sticky top-0 left-0 select-none z-10'>
-            <div onClick={() => handleRoute("")} className='md:pl-4 flex h-fit items-center w-fit cursor-pointer'>
-                <img src='logo.png' alt="dapp logo" className='w-8 h-8 m-3' />
-                <p className="h-fit text-2xl text-slate-200 cursor-pointer font-medium">DCX</p>
+            <div className='md:py-1 flex h-fit items-center justify-center w-fit'>
+                <div onClick={() => handleRoute("")} className='cursor-pointer flex items-center  border-slate-400 px-8 border-r-2'>
+                    <img src='logo.png' alt="dapp logo" className='w-8 h-8 m-1' />
+                    <p className="h-fit text-2xl text-slate-200 cursor-pointer font-medium">DCX</p>
+                </div>
+                <div className={selectModal === true ? "mx-4 w-fit border-2 border-slate-700" : "mx-4 w-fit border-2 border-slate-800"}>
+                    <div onClick={() => setSelectModal(!selectModal)} className='w-48 px-4 py-1 cursor-pointer flex items-center'>
+                        <img className='w-6 h-6 mx-2' src={`./${tradeToken}.png`} alt="bat token" />
+                        <p className='text-slate-200 text-xl mx-2'>{tradeToken}/Dai *</p>
+                    </div>
+                    {
+                        selectModal &&
+                        <div className='absolute top-11 bg-slate-800 w-48'>
+                            <div onClick={() => handleSelect("Bat")} className='flex items-center px-4 border-2 border-slate-700 py-2 cursor-pointer'>
+                                <img className='w-6 h-6 mx-2' src="./Bat.png" alt="bat token" />
+                                <p className='text-slate-200 text-xl mx-2'>Bat/Dai</p>
+                            </div>
+                            <div onClick={() => handleSelect("Rep")} className='flex items-center px-4 border-2 border-slate-700 py-2 cursor-pointer'>
+                                <img className='w-6 h-6 mx-2' src="./Rep.png" alt="rep token" />
+                                <p className='text-slate-200 text-xl mx-2'>Rep/Dai</p>
+                            </div>
+                            <div onClick={() => handleSelect("Zrx")} className='flex items-center px-4 border-2 border-slate-700 py-2 cursor-pointer'>
+                                <img className='w-6 h-6 mx-2' src="./Zrx.png" alt="zrx token" />
+                                <p className='text-slate-200 text-xl mx-2'>Zrx/Dai</p>
+                            </div>
+                        </div>
+                    }
+                </div>
             </div>
             <div className='flex grow justify-end items-center  md:pr-4'>
                 <div className='hidden md:flex md:border-r-2 border-slate-400'>

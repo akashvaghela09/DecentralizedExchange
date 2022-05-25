@@ -15,7 +15,7 @@ function App() {
   } = useSelector(state => state.app)
 
   return (
-    <div className="bg-slate-400 h-screen max-h-screen">
+    <div className="bg-slate-900 h-screen max-h-screen">
       <Header />
       <AllRoutes />
       <Footer />

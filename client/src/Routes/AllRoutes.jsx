@@ -5,7 +5,7 @@ import { PageNotFound } from "./PageNotFound";
 
 const AllRoutes = () => {
     return (
-        <div className="bg-slate-300 h-fit">
+        <div className="bg-slate-900 h-fit">
             <Routes>
                 <Route exact path="/" element={<Home />} />
                 <Route exact path="*" element={<PageNotFound />} />

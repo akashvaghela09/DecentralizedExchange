@@ -3,20 +3,32 @@ import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../Redux/app/actions"
 import commonWallet from "../Utils/commonWallet";
 import { ethers } from "ethers";
+import { DcxWallet } from '../Components/DcxWallet';
+import { Trade } from '../Components/Trade';
+import { Orders } from '../Components/Orders';
+import { OrderBook } from '../Components/OrderBook';
 
 const Home = () => {
     const dispatch = useDispatch();
 
     const {
-        contract
-      } = useSelector(state => state.app)
+        tradeToken
+    } = useSelector(state => state.app)
 
 
     const getData = async () => {
+
+        dispatch(setLoading(true))
+
+        try {
+            console.log(commonWallet)
+            let tokens = await commonWallet.getTokens();
+            console.log(tokens);
+        } catch (error) {
+            console.log(error)
+        }
+        dispatch(setLoading(false))
         
-        // setInterval(async () => {
-        //     console.log(await contract);
-        // }, 3000);
         // dispatch(setLoading(true))
 
         // let data = await commonWallet.getFundingData()
@@ -41,18 +53,26 @@ const Home = () => {
 
         // let totalFund = await commonWallet.getTotalFundRaised()
         // const ethValue = Math.floor(ethers.utils.formatEther(totalFund) * 100) / 100;
-        
+
         // setTotalRaised(ethValue)
         // dispatch(setLoading(false))
     }
 
-    useEffect(() => {
-        getData()
-    }, []);
+    // useEffect(() => {
+    //     getData()
+    // }, []);
 
     return (
-        <div className='h-full min-h-screen flex items-center flex-col'>
-                    <h1 className='w-fit text-4xl md:text-7xl font-bold text-slate-800  bg-slate-200'>Home</h1>
+        <div className='h-full min-h-screen flex pb-10 bg-slate-500'>
+            <div className='basis-1/3 px-2'>
+                <DcxWallet />
+                <Trade />
+            </div>
+        <div className='grow px-2'>
+            <Orders />
+            <OrderBook />
+        </div>
+        
         </div>
     )
 }
