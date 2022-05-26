@@ -11,7 +11,8 @@ import {
     SET_DAI_BALANCE,
     SET_WALLET_TX_TYPE,
     SET_TRADE_TX_SIDE,
-    SET_ORDER_TX_TYPE
+    SET_ORDER_TX_TYPE,
+    SET_TOKEN_LIST
 } from './actionTypes';
 
 const initialState = {
@@ -23,6 +24,7 @@ const initialState = {
     walletModal: false,
     isAuth: false,
     tradeToken: "Bat",
+    tokenList: [],
     tokenBalance: "0.00",
     daiBalance: "0.00",
     walletTxType: "Deposit",
@@ -97,6 +99,11 @@ const reducer = (state = initialState, { type, payload }) => {
             return {
                 ...state,
                 orderTxType: payload
+            }
+        case SET_TOKEN_LIST:
+            return {
+                ...state,
+                tokenList: payload
             }
         default:
             return state

@@ -4,16 +4,18 @@ import { AiFillHome } from 'react-icons/ai';
 import { FaGithub, FaUserCircle } from 'react-icons/fa';
 import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from "react-redux";
-import { setTradeToken } from '../Redux/app/actions';
+import { setDaiBalance, setTokenBalance, setTradeToken } from '../Redux/app/actions';
+import { getBalance } from '../Utils/helper';
 
 const Header = () => {
     const dispatch = useDispatch();
 
     const {
-        tradeToken
+        tradeToken,
+        tokenList
     } = useSelector(state => state.app)
 
-    const tokenList = ["Bat", "Rep", "Zrx"];
+    // const tokenList = ["Bat", "Rep", "Zrx"];
 
     const [selectModal, setSelectModal] = useState(false);
 
@@ -25,6 +27,10 @@ const Header = () => {
 
     const handleSelect = (para) => {
         dispatch(setTradeToken(para))
+        let dai = getBalance(tokenList, "Dai")
+        dispatch(setDaiBalance(dai))
+        let bat = getBalance(tokenList, para)
+        dispatch(setTokenBalance(bat))
         setSelectModal(false)
     }
 

@@ -19,11 +19,32 @@ const Home = () => {
     const getData = async () => {
 
         dispatch(setLoading(true))
+        let hash = ethers.utils.formatBytes32String(tradeToken)
+        console.log(hash)
 
         try {
             console.log(commonWallet)
-            let tokens = await commonWallet.getTokens();
-            console.log(tokens);
+            let list = await commonWallet.getTokens(
+                // "0x51E821EE92486EfbaE1A63b2da3f75546084c6B8",
+                // "0x4241540000000000000000000000000000000000000000000000000000000000"
+            );
+
+            let tokenArray = []
+
+            for(let i = 0; i < list.length; i++){
+                let tokenObj = {}
+                let ticker = ethers.utils.parseBytes32String(list[i].ticker)
+                let lowerCase = ticker.toLowerCase()
+                let tokenName = lowerCase.charAt(0).toUpperCase() + lowerCase.slice(1)
+                
+                tokenObj.name = tokenName;
+                tokenObj.ticker = list[i].ticker;
+                tokenObj.address = list[i].tokenAddress;
+
+                tokenArray.push(tokenObj)
+            }
+            
+            console.log(tokenArray)
         } catch (error) {
             console.log(error)
         }
@@ -68,10 +89,11 @@ const Home = () => {
                 <DcxWallet />
                 <Trade />
             </div>
-        <div className='grow px-2'>
+            <button onClick={() => getData()}>GET</button>
+        {/* <div className='grow px-2'>
             <Orders />
             <OrderBook />
-        </div>
+        </div> */}
         
         </div>
     )

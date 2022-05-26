@@ -11,7 +11,8 @@ import {
     SET_DAI_BALANCE,
     SET_WALLET_TX_TYPE,
     SET_TRADE_TX_SIDE,
-    SET_ORDER_TX_TYPE
+    SET_ORDER_TX_TYPE,
+    SET_TOKEN_LIST
 } from './actionTypes';
 
 const setLoading = (payload) => {
@@ -105,6 +106,13 @@ const setOrderTxType = (payload) => {
     }
 }
 
+const setTokenList = (payload) => {
+    return {
+        type: SET_TOKEN_LIST,
+        payload
+    }
+}
+
 export { 
     setLoading,
     setError,
@@ -118,5 +126,6 @@ export {
     setDaiBalance,
     setWalletTxType,
     setTradeTxSide,
-    setOrderTxType
+    setOrderTxType,
+    setTokenList
 }

@@ -7,6 +7,7 @@ export const SET_WALLET = "SET_WALLET";
 export const SET_WALLET_MODAL = "SET_WALLET_MODAL";
 export const SET_IS_AUTH = "SET_IS_AUTH";
 export const SET_TRADE_TOKEN = "SET_TRADE_TOKEN";
+export const SET_TOKEN_LIST = "SET_TOKEN_LIST";
 export const SET_TOKEN_BALANCE = "SET_TOKEN_BALANCE";
 export const SET_DAI_BALANCE = "SET_DAI_BALANCE";
 export const SET_WALLET_TX_TYPE = "SET_WALLET_TX_TYPE";

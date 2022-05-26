@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { setTradeTxSide, setOrderTxType } from '../Redux/app/actions';
+import { setTradeTxSide, setOrderTxType, setAlert } from '../Redux/app/actions';
 
 const Trade = () => {
     const dispatch = useDispatch();
 
     const {
+        contract,
         tradeToken,
         tradeTxSide,
         orderTxType
     } = useSelector(state => state.app)
+
+    const [txAmount, setTxAmount] = useState("");
 
     const handleTradeTxSide = (para) => {
         dispatch(setTradeTxSide(para))
@@ -17,6 +20,13 @@ const Trade = () => {
 
     const handleOrderTxType = (para) => {
         dispatch(setOrderTxType(para))
+    }
+
+    const handleTradeTx = () => {
+        if(txAmount <= 0){
+            dispatch(setAlert({status: true, msg: "Please enter a valid amount"}))
+            return;
+        } 
     }
 
     return (
@@ -38,7 +48,7 @@ const Trade = () => {
                     </label>
                 </div>
                 <div className='bg-slate-400 flex m-2 px-2 rounded'>
-                    <input placeholder='0.00' className='bg-slate-400 placeholder:text-gray-700 outline-none w-full' />
+                    <input value={txAmount} onChange={(e) => setTxAmount(e.target.value)}  placeholder='0.00' className='bg-slate-400 placeholder:text-gray-700 outline-none w-full' />
                     <p className='p-2 '>{tradeToken}</p>
                 </div>
             </div>
@@ -52,7 +62,7 @@ const Trade = () => {
                     <p className=''>Cost</p>
                     <p className=''>0.00</p>
                 </label>
-                <button className={tradeTxSide === "Buy" ? "bg-green-700 text-white w-full p-3 mt-2 rounded active:translate-y-1" : "bg-red-700 text-white w-full p-3 mt-2 rounded active:translate-y-1"}>{tradeTxSide} {tradeToken}</button>
+                <button onClick={() => handleTradeTx()} className={tradeTxSide === "Buy" ? "bg-green-700 text-white w-full p-3 mt-2 rounded active:translate-y-1" : "bg-red-700 text-white w-full p-3 mt-2 rounded active:translate-y-1"}>{tradeTxSide} {tradeToken}</button>
             </div>
         </div>
     )

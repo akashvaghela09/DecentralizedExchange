@@ -10,11 +10,13 @@ import { IoWalletOutline } from 'react-icons/io5';
 import { GoLinkExternal } from 'react-icons/go';
 import { SiHiveBlockchain } from 'react-icons/si';
 import { FiLogOut } from 'react-icons/fi';
-import { setContractInstance, setIsAuth, setLoading, setWallet, setWalletModal } from "../Redux/app/actions"
+import { setContractInstance, setIsAuth, setLoading, setWallet, setWalletModal, setTokenList, setTokenBalance, setDaiBalance } from "../Redux/app/actions"
 import { ethers } from "ethers";
 import myContractData from "../artifacts/contracts/DCX.sol/DCX.json";
 import { metamask, metaMaskChecker } from '../Utils/metamaskChecker';
 import { toast } from 'react-toastify';
+import commonWallet from '../Utils/commonWallet';
+import { getTokenData, getBalance } from '../Utils/helper';
 
 const Wallet = () => {
     const dispatch = useDispatch();
@@ -24,14 +26,15 @@ const Wallet = () => {
     const [guestWalletLoading, setGuestWalletLoading] = useState(false)
     const [userWalletLoading, setUserWalletLoading] = useState(false)
     const [logoutLoading, setLogoutLoading] = useState(false)
-    
+
     const abi = myContractData.abi;
     const contract_address = process.env.REACT_APP_DCX_CONTRACT_ADDRESS;
 
     const {
         isAuth,
         wallet,
-        walletModal
+        walletModal,
+        tradeToken
     } = useSelector(state => state.app)
 
     const checkAuthStatus = () => {
@@ -49,11 +52,11 @@ const Wallet = () => {
                 setUserWalletLoading(false);
                 let response = await metaMaskChecker();
 
-                if(response.status === true){
+                if (response.status === true) {
                     connectWallet(para)
                 } else {
                     dispatch(setWalletModal(false))
-                    toast.error(response.msg, {autoClose: false})
+                    toast.error(response.msg, { autoClose: false })
                 }
             }, 1500);
         } else if (para === "guest") {
@@ -68,8 +71,8 @@ const Wallet = () => {
     const connectWallet = async (para) => {
         dispatch(setWalletModal(false))
         dispatch(setLoading(true));
-        
-        if(para === "user"){
+
+        if (para === "user") {
             let walletObj = { "name": "MetaMask" }
             walletObj.accounts = await metamask.requestAccounts()
             walletObj.balance = await metamask.getBalance()
@@ -77,36 +80,46 @@ const Wallet = () => {
             walletObj.isConnected = await metamask.isConnected()
             dispatch(setWallet(walletObj));
             dispatch(setIsAuth(true))
-    
+
             const ethersProvider = new ethers.providers.Web3Provider(window.ethereum, "any");
             let mySigner = ethersProvider.getSigner();
-    
-            let contractObj = new ethers.Contract(
-                contract_address,
-                abi,
-                mySigner
-            );
-    
-            dispatch(setContractInstance(contractObj))
-        } else if (para === "guest"){
-            dispatch(setWallet({ "name": "MetaMask", "accounts": ['0x000000000000000000000000'], "balance": "0.0000000000000", "network": "0x4", "isConnected": true }));
-            dispatch(setIsAuth(true))
-    
-            const ethersProvider = ethers.getDefaultProvider(process.env.REACT_APP_RINKEBY_URL);
-            const guestWallet = new ethers.Wallet(process.env.REACT_APP_PRIVATE_KEY, ethersProvider);
-            let mySigner = guestWallet.connect(ethersProvider)
-    
+
             let contractObj = new ethers.Contract(
                 contract_address,
                 abi,
                 mySigner
             );
 
-            console.log("before dispatch")
             dispatch(setContractInstance(contractObj))
-            console.log("after dispatch");
+            let list = await getTokenData(contractObj, walletObj.accounts[0])
+            let dai = getBalance(list, "Dai")
+            dispatch(setDaiBalance(dai))
+            let bat = getBalance(list, tradeToken)
+            dispatch(setTokenBalance(bat))
+
+        } else if (para === "guest") {
+            dispatch(setWallet({ "name": "MetaMask", "accounts": ['0x000000000000000000000000'], "balance": "0.0000000000000", "network": "0x4", "isConnected": true }));
+            dispatch(setIsAuth(true))
+
+            const ethersProvider = ethers.getDefaultProvider(process.env.REACT_APP_RINKEBY_URL);
+            const guestWallet = new ethers.Wallet(process.env.REACT_APP_PRIVATE_KEY, ethersProvider);
+            let mySigner = guestWallet.connect(ethersProvider)
+
+            let contractObj = new ethers.Contract(
+                contract_address,
+                abi,
+                mySigner
+            );
+
+            dispatch(setContractInstance(contractObj))
+            let list = await getTokenData(contractObj, "0x51E821EE92486EfbaE1A63b2da3f75546084c6B8")
+            console.log(list)
+            let dai = getBalance(list, "Dai")
+            dispatch(setDaiBalance(dai))
+            let bat = getBalance(list, tradeToken)
+            dispatch(setTokenBalance(bat))
         }
-        
+
         dispatch(setLoading(false));
     }
 
@@ -119,6 +132,8 @@ const Wallet = () => {
             dispatch(setWalletModal(false))
             dispatch(setWallet({}))
             dispatch(setContractInstance({}))
+            dispatch(setTokenBalance("0.00"))
+            dispatch(setDaiBalance("0.00"))
         }, 1500);
     }
 
@@ -136,6 +151,45 @@ const Wallet = () => {
         let string = `${start}...${end}`
         return string;
     }
+
+    // const getTokenData = async (contractPara, addressPara) => {
+    //     dispatch(setLoading(true))
+
+    //     try {
+    //         let list = await commonWallet.getTokens();
+    //         let tokenArray = []
+
+    //         for(let i = 0; i < list.length; i++){
+    //             let tokenObj = {}
+    //             let ticker = ethers.utils.parseBytes32String(list[i].ticker)
+    //             let lowerCase = ticker.toLowerCase()
+    //             let tokenName = lowerCase.charAt(0).toUpperCase() + lowerCase.slice(1)
+    //             let balance = await contractPara.traderBalances(addressPara, list[i].ticker)
+
+    //             tokenObj.name = tokenName;
+    //             tokenObj.ticker = list[i].ticker;
+    //             tokenObj.address = list[i].tokenAddress;
+    //             tokenObj.balance = balance.toString();
+
+    //             tokenArray.push(tokenObj)
+    //         }
+
+    //         tokenArray.forEach((el) => {
+    //             if(el.name === tradeToken){
+    //                 dispatch(setTokenBalance(el.balance))
+    //             }
+    //             if(el.name === "Dai"){
+    //                 dispatch(setDaiBalance(el.balance))
+    //             }
+    //         })
+
+    //         dispatch(setTokenList(tokenArray))
+    //         dispatch(setLoading(false))
+    //     } catch (error) {
+    //         console.log(error)
+    //         dispatch(setLoading(false))
+    //     }
+    //   }
 
     return (
         <>
