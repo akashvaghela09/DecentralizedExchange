@@ -92,13 +92,14 @@ const Wallet = () => {
 
             dispatch(setContractInstance(contractObj))
             let list = await getTokenData(contractObj, walletObj.accounts[0])
+            dispatch(setTokenList(list))
             let dai = getBalance(list, "Dai")
             dispatch(setDaiBalance(dai))
             let bat = getBalance(list, tradeToken)
             dispatch(setTokenBalance(bat))
 
         } else if (para === "guest") {
-            dispatch(setWallet({ "name": "MetaMask", "accounts": ['0x000000000000000000000000'], "balance": "0.0000000000000", "network": "0x4", "isConnected": true }));
+            dispatch(setWallet({ "name": "MetaMask", "accounts": ['0x51E821EE92486EfbaE1A63b2da3f75546084c6B8'], "balance": "0.0000000000000", "network": "0x4", "isConnected": true }));
             dispatch(setIsAuth(true))
 
             const ethersProvider = ethers.getDefaultProvider(process.env.REACT_APP_RINKEBY_URL);
@@ -113,7 +114,7 @@ const Wallet = () => {
 
             dispatch(setContractInstance(contractObj))
             let list = await getTokenData(contractObj, "0x51E821EE92486EfbaE1A63b2da3f75546084c6B8")
-            console.log(list)
+            dispatch(setTokenList(list))
             let dai = getBalance(list, "Dai")
             dispatch(setDaiBalance(dai))
             let bat = getBalance(list, tradeToken)
@@ -151,45 +152,6 @@ const Wallet = () => {
         let string = `${start}...${end}`
         return string;
     }
-
-    // const getTokenData = async (contractPara, addressPara) => {
-    //     dispatch(setLoading(true))
-
-    //     try {
-    //         let list = await commonWallet.getTokens();
-    //         let tokenArray = []
-
-    //         for(let i = 0; i < list.length; i++){
-    //             let tokenObj = {}
-    //             let ticker = ethers.utils.parseBytes32String(list[i].ticker)
-    //             let lowerCase = ticker.toLowerCase()
-    //             let tokenName = lowerCase.charAt(0).toUpperCase() + lowerCase.slice(1)
-    //             let balance = await contractPara.traderBalances(addressPara, list[i].ticker)
-
-    //             tokenObj.name = tokenName;
-    //             tokenObj.ticker = list[i].ticker;
-    //             tokenObj.address = list[i].tokenAddress;
-    //             tokenObj.balance = balance.toString();
-
-    //             tokenArray.push(tokenObj)
-    //         }
-
-    //         tokenArray.forEach((el) => {
-    //             if(el.name === tradeToken){
-    //                 dispatch(setTokenBalance(el.balance))
-    //             }
-    //             if(el.name === "Dai"){
-    //                 dispatch(setDaiBalance(el.balance))
-    //             }
-    //         })
-
-    //         dispatch(setTokenList(tokenArray))
-    //         dispatch(setLoading(false))
-    //     } catch (error) {
-    //         console.log(error)
-    //         dispatch(setLoading(false))
-    //     }
-    //   }
 
     return (
         <>

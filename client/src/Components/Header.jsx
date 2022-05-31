@@ -15,8 +15,6 @@ const Header = () => {
         tokenList
     } = useSelector(state => state.app)
 
-    // const tokenList = ["Bat", "Rep", "Zrx"];
-
     const [selectModal, setSelectModal] = useState(false);
 
     let navigate = useNavigate();
