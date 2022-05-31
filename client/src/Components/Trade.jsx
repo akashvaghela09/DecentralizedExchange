@@ -1,18 +1,26 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { setTradeTxSide, setOrderTxType, setAlert } from '../Redux/app/actions';
+import { setTradeTxSide, setOrderTxType, setAlert, setLoading, setTokenBalance, setDaiBalance, setTokenList } from '../Redux/app/actions';
+import { getTicker, getTokenData, getBalance } from "../Utils/helper";
 
 const Trade = () => {
     const dispatch = useDispatch();
 
     const {
         contract,
+        wallet,
         tradeToken,
+        tokenList,
         tradeTxSide,
         orderTxType
     } = useSelector(state => state.app)
 
     const [txAmount, setTxAmount] = useState("");
+    
+    const SIDE = {
+        BUY: 0,
+        SELL: 1
+      };
 
     const handleTradeTxSide = (para) => {
         dispatch(setTradeTxSide(para))
@@ -22,11 +30,47 @@ const Trade = () => {
         dispatch(setOrderTxType(para))
     }
 
-    const handleTradeTx = () => {
+    const handleTradeTx = async () => {
+        dispatch(setLoading(true))
         if(txAmount <= 0){
             dispatch(setAlert({status: true, msg: "Please enter a valid amount"}))
+            dispatch(setLoading(false))
             return;
         } 
+
+        let ticker = getTicker(tokenList, tradeToken)
+        let crrSide = tradeTxSide === "Buy" ? SIDE.BUY : SIDE.SELL;
+        
+        if(orderTxType === "Market"){
+            console.log(ticker)
+            console.log(crrSide)
+            console.log(txAmount)
+            console.log(orderTxType)
+            let tx = await contract.createMarketOrder(ticker, txAmount, crrSide)
+            await tx.wait()
+            getLatestBalance()
+
+        } else if (orderTxType === "Limit") {
+            console.log(ticker)
+            console.log(crrSide)
+            console.log(txAmount)
+            console.log(orderTxType)
+            let tx = await contract.createLimitOrder(ticker, txAmount, crrSide)
+            await tx.wait()
+            getLatestBalance()
+        }
+
+        setTxAmount("");
+        dispatch(setLoading(false))
+    }
+
+    const getLatestBalance = async () => {
+        let list = await getTokenData(contract, wallet.accounts[0])
+        dispatch(setTokenList(list))
+        let dai = getBalance(list, "Dai")
+        dispatch(setDaiBalance(dai))
+        let bat = getBalance(list, tradeToken)
+        dispatch(setTokenBalance(bat))
     }
 
     return (

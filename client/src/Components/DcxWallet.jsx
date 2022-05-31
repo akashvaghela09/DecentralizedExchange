@@ -48,7 +48,7 @@ const DcxWallet = () => {
     }
 
     const getLatestBalance = async () => {
-        let list = await getTokenData(contract, "0x51E821EE92486EfbaE1A63b2da3f75546084c6B8")
+        let list = await getTokenData(contract, wallet.accounts[0])
         dispatch(setTokenList(list))
         let dai = getBalance(list, "Dai")
         dispatch(setDaiBalance(dai))
