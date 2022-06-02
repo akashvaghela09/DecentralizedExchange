@@ -19,8 +19,8 @@ const OrderBook = () => {
         SELL: 1
     };
 
-    const [buyOrderList, setBuyOrderList] = useState([5, 2, 2, 2, 2]);
-    const [sellOrderList, setSellOrderList] = useState([5, 2, 2, 2, 2]);
+    const [buyOrderList, setBuyOrderList] = useState([]);
+    const [sellOrderList, setSellOrderList] = useState([]);
 
     const getAllOrdersData = async () => {
         console.log("tokenList", tokenList)
@@ -28,25 +28,25 @@ const OrderBook = () => {
 
         let ticker = getTicker(tokenList, tradeToken)
         console.log("ticker", ticker)
-        let data = await contract.getOrders(ticker, SIDE.BUY)
-        console.log("data", data);
+        // let data = await contract.getOrders(ticker, SIDE.BUY)
+        // console.log("data", data);
 
-        const orders = await Promise.all([
-            contract.getOrders(
-                ticker,
-                SIDE.BUY
-            ),
-            contract.getOrders(
-                ticker,
-                SIDE.SELL
-            ),
-        ]);
+        // const orders = await Promise.all([
+        //     contract.getOrders(
+        //         ticker,
+        //         SIDE.BUY
+        //     ),
+        //     contract.getOrders(
+        //         ticker,
+        //         SIDE.SELL
+        //     ),
+        // ]);
 
-        console.log("orders: ", orders)
-        // let buyList = await getOrderBook(ticker, SIDE.BUY, contract)
-        // console.log(buyList)
-        // let sellList = await getOrderBook(ticker, SIDE.SELL, contract)
-        // console.log(sellList)
+        // console.log("orders: ", orders)
+        let buyList = await getOrderBook(ticker, SIDE.BUY, contract)
+        console.log("buy list: ", buyList)
+        let sellList = await getOrderBook(ticker, SIDE.SELL, contract)
+        console.log("sell list: ", sellList)
     }
     // useEffect(() => {
     // getAllOrdersData()
@@ -84,7 +84,7 @@ const OrderBook = () => {
 
                                 {buyOrderList.map((el, index) => {
                                     return (
-                                        <div className='grow flex  divide-x-2 divide-slate-400'>
+                                        <div className='grow flex  divide-x-2 divide-slate-400' key={`key-${index+1}`}>
                                             <div className='w-1/3 px-2 py-1 border-b-2 border-slate-400'>200</div>
                                             <div className='w-1/3 px-2 py-1 border-b-2 border-slate-400'>30000</div>
                                             <div className='w-1/3 px-2 py-1 border-b-2 border-slate-400'>Date</div>
@@ -101,7 +101,7 @@ const OrderBook = () => {
 
                                 {sellOrderList.map((el, index) => {
                                     return (
-                                        <div className='grow flex  divide-x-2 divide-slate-400'>
+                                        <div className='grow flex  divide-x-2 divide-slate-400' key={`key-${index+1}`}>
                                             <div className='w-1/3 px-2 py-1 border-b-2 border-slate-400'>200</div>
                                             <div className='w-1/3 px-2 py-1 border-b-2 border-slate-400'>30000</div>
                                             <div className='w-1/3 px-2 py-1 border-b-2 border-slate-400'>Date</div>

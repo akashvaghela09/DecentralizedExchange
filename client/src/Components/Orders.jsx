@@ -17,8 +17,8 @@ const Orders = () => {
         SELL: 1
     };
 
-    const [buyOrderList, setBuyOrderList] = useState([5, 2, 2, 2, 2]);
-    const [sellOrderList, setSellOrderList] = useState([5, 2, 2, 2, 2]);
+    const [buyOrderList, setBuyOrderList] = useState([]);
+    const [sellOrderList, setSellOrderList] = useState([]);
 
     const getAllOrdersData = async () => {
         console.log("tokenList", tokenList)
@@ -83,7 +83,7 @@ const Orders = () => {
 
                                 {buyOrderList.map((el, index) => {
                                     return (
-                                        <div className='grow flex  divide-x-2 divide-slate-400'>
+                                        <div className='grow flex  divide-x-2 divide-slate-400' key={`key-${index+1}`}>
                                             <div className='w-1/3 px-2 py-1 border-b-2 border-slate-400'>200</div>
                                             <div className='w-1/3 px-2 py-1 border-b-2 border-slate-400'>30000</div>
                                             <div className='w-1/3 px-2 py-1 border-b-2 border-slate-400'>Date</div>
@@ -100,7 +100,7 @@ const Orders = () => {
 
                                 {sellOrderList.map((el, index) => {
                                     return (
-                                        <div className='grow flex  divide-x-2 divide-slate-400'>
+                                        <div className='grow flex  divide-x-2 divide-slate-400' key={`key-${index+1}`}>
                                             <div className='w-1/3 px-2 py-1 border-b-2 border-slate-400'>200</div>
                                             <div className='w-1/3 px-2 py-1 border-b-2 border-slate-400'>30000</div>
                                             <div className='w-1/3 px-2 py-1 border-b-2 border-slate-400'>Date</div>

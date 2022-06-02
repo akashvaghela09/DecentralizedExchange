@@ -44,11 +44,25 @@ export const getTicker = (tokenList, token) => {
 }
 
 export const getOrderBook = async (ticker, side) => {
-    console.log("getorderbook")
-    console.log(ticker);
-    console.log(side);
+    console.log("get orderbook")
+    console.log("tiker: ", ticker);
+    console.log("side: ", side);
     let data = await commonWallet.getOrders(ticker, side);
     console.log(data);
+    let list = []
+
+    for(let i = 0; i < data.length; i++) {
+        let order = {};
+        order.id = data[i].id.toString();
+        order.price = data[i].price.toString();
+        order.amount = data[i].amount.toString();
+        order.ticker = ethers.utils.parseBytes32String(data[i].ticker);
+        order.trader = data[i].trader;
+        order.date = data[i].toString();
+        order.filled = data[i].filled.toString();
+        list.push(order)
+    }
+    return list;
 }
 
 export const getMyOrders = (order) => {
