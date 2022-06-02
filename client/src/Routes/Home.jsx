@@ -16,16 +16,16 @@ const Home = () => {
     } = useSelector(state => state.app)
 
     return (
-        <div className='h-full min-h-screen flex pb-10 bg-slate-500'>
-            <div className='basis-1/3 px-2'>
+        <div className='h-full min-h-screen flex flex-col md:flex-row  pb-10 bg-slate-500'>
+            <div className='basis-1/3 px-2 flex flex-col'>
                 <DcxWallet />
                 <Trade />
             </div>
-        <div className='grow px-2'>
-            <Orders />
-            <OrderBook />
-        </div>
-        
+            <div className='grow px-2'>
+                <Orders />
+                <OrderBook />
+            </div>
+
         </div>
     )
 }
