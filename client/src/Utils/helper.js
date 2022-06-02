@@ -42,3 +42,15 @@ export const getTicker = (tokenList, token) => {
         }
     }
 }
+
+export const getOrderBook = async (ticker, side) => {
+    console.log("getorderbook")
+    console.log(ticker);
+    console.log(side);
+    let data = await commonWallet.getOrders(ticker, side);
+    console.log(data);
+}
+
+export const getMyOrders = (order) => {
+    console.log("myorders")
+}

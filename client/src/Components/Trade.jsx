@@ -16,11 +16,12 @@ const Trade = () => {
     } = useSelector(state => state.app)
 
     const [txAmount, setTxAmount] = useState("");
-    
+    const [txPrice, setTxPrice] = useState("");
+
     const SIDE = {
         BUY: 0,
         SELL: 1
-      };
+    };
 
     const handleTradeTxSide = (para) => {
         dispatch(setTradeTxSide(para))
@@ -32,34 +33,35 @@ const Trade = () => {
 
     const handleTradeTx = async () => {
         dispatch(setLoading(true))
-        if(txAmount <= 0){
-            dispatch(setAlert({status: true, msg: "Please enter a valid amount"}))
+        if (txPrice <= 0) {
+            dispatch(setAlert({ status: true, msg: "Please enter a valid amount" }))
             dispatch(setLoading(false))
             return;
-        } 
+        }
 
         let ticker = getTicker(tokenList, tradeToken)
         let crrSide = tradeTxSide === "Buy" ? SIDE.BUY : SIDE.SELL;
-        
-        if(orderTxType === "Market"){
-            console.log(ticker)
-            console.log(crrSide)
-            console.log(txAmount)
-            console.log(orderTxType)
+
+        if (orderTxType === "Market") {
+            // console.log(ticker)
+            // console.log(crrSide)
+            // console.log(txPrice)
+            // console.log(orderTxType)
             let tx = await contract.createMarketOrder(ticker, txAmount, crrSide)
             await tx.wait()
             getLatestBalance()
 
         } else if (orderTxType === "Limit") {
-            console.log(ticker)
-            console.log(crrSide)
-            console.log(txAmount)
-            console.log(orderTxType)
-            let tx = await contract.createLimitOrder(ticker, txAmount, crrSide)
+            // console.log(ticker)
+            // console.log(crrSide)
+            // console.log(txPrice)
+            // console.log(orderTxType)
+            let tx = await contract.createLimitOrder(ticker, txAmount, txPrice, crrSide)
             await tx.wait()
             getLatestBalance()
         }
 
+        setTxPrice("");
         setTxAmount("");
         dispatch(setLoading(false))
     }
@@ -92,9 +94,21 @@ const Trade = () => {
                     </label>
                 </div>
                 <div className='bg-slate-400 flex m-2 px-2 rounded'>
-                    <input value={txAmount} onChange={(e) => setTxAmount(e.target.value)}  placeholder='0.00' className='bg-slate-400 placeholder:text-gray-700 outline-none w-full' />
+                    <input value={txAmount} onChange={(e) => setTxAmount(e.target.value)} placeholder='0.00' className='bg-slate-400 placeholder:text-gray-700 outline-none w-full' />
                     <p className='p-2 '>{tradeToken}</p>
                 </div>
+                {
+                    orderTxType === "Limit" &&
+                    <>
+                        <div className='flex items-center'>
+                            <p className='grow mx-2'>Price</p>
+                        </div>
+                        <div className='bg-slate-400 flex m-2 px-2 rounded'>
+                            <input value={txPrice} onChange={(e) => setTxPrice(e.target.value)} placeholder='0.00' className='bg-slate-400 placeholder:text-gray-700 outline-none w-full' />
+                            <p className='p-2 '>Dai</p>
+                        </div>
+                    </>
+                }
             </div>
             <div className='p-4'>
                 <p className='py-1'>Order Details</p>
